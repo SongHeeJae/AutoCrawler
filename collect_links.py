@@ -131,9 +131,13 @@ class CollectLinks:
                 print('[Exception occurred while collecting links from google] {}'.format(e))
 
         print('Collect links done. Site: {}, Keyword: {}, Total: {}'.format('google', keyword, len(links)))
-        self.browser.close()
 
-        return set(links)
+        try:
+            self.browser.close()
+        except Exception as e:
+            print("{} browser already closed : {}".format('google', e))
+        finally:
+            return set(links)
 
     def naver(self, keyword, add_url=""):
         self.browser.get("https://search.naver.com/search.naver?where=image&sm=tab_jum&query={}{}".format(keyword, add_url))
@@ -176,7 +180,63 @@ class CollectLinks:
                 print('[Exception occurred while collecting links from naver] {}'.format(e))
 
         print('Collect links done. Site: {}, Keyword: {}, Total: {}'.format('naver', keyword, len(links)))
-        self.browser.close()
+
+        try:
+            self.browser.close()
+        except Exception as e:
+            print("{} browser already closed : {}".format('naver', e))
+        finally:
+            return set(links)
+
+    def daum(self, keyword, add_url=""): # 추가 메소드
+        self.browser.get("https://search.daum.net/search?w=img&nil_search=btn&DA=NTB&enc=utf8&q={}{}".format(keyword, add_url))
+
+        time.sleep(1)
+
+        print('Scrolling down')
+
+        elem = self.browser.find_element_by_tag_name("body")
+       
+        try:
+            while True:
+                for i in range(30):
+                    elem.send_keys(Keys.PAGE_DOWN)
+                    time.sleep(0.2)
+
+                w = WebDriverWait(self.browser, 15)
+                elem = w.until(EC.element_to_be_clickable((By.XPATH, '//a[@class="expender open"]')))
+                elem.click()
+
+        except ElementNotVisibleException:
+            pass
+        except Exception:
+            pass
+
+        photo_grid_boxes = self.browser.find_elements(By.XPATH, '//div[@class="wrap_thumb"]')
+
+        print('Scraping links')
+
+        links = []
+
+        for box in photo_grid_boxes:
+            try:
+                img = box.find_elements(By.TAG_NAME, 'img')
+                src = img[0].get_attribute("src")
+                links.append(src)
+            except Exception as e:
+                print('[Exception occurred while collecting links from daum] {}'.format(e))
+
+        print('Collect links done. Site: {}, Keyword: {}, Total: {}'.format('daum', keyword, len(links)))
+
+        try:
+            self.browser.close()
+        except Exception as e:
+            print("{} browser already closed : {}".format('daum', e))
+        finally:
+            return set(links)
+
+    def daum_full(self, keyword, add_url=""): # 추가 메소드
+        
 
         return set(links)
 
