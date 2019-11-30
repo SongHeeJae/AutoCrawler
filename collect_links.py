@@ -27,7 +27,7 @@ import os.path as osp
 
 
 class CollectLinks:
-    def __init__(self):
+    def __init__(self, maxNum):
         executable = ''
 
         if platform.system() == 'Windows':
@@ -46,6 +46,7 @@ class CollectLinks:
             raise FileNotFoundError('Chromedriver file should be placed at {}'.format(executable))
 
         self.browser = webdriver.Chrome(executable)
+        self.maxNum = maxNum
 
         browser_version = 'Failed to detect version'
         chromedriver_version = 'Failed to detect version'
@@ -118,6 +119,7 @@ class CollectLinks:
 
         links = []
 
+        scraped = 0
         for box in photo_grid_boxes:
             try:
                 imgs = box.find_elements(By.TAG_NAME, 'img')
@@ -125,8 +127,9 @@ class CollectLinks:
                 for img in imgs:
                     src = img.get_attribute("src")
                     if src[0] != 'd':
-                        links.append(src)
-
+                        if scraped < self.maxNum:
+                            links.append(src)
+                            scraped +=1
             except Exception as e:
                 print('[Exception occurred while collecting links from google] {}'.format(e))
 
@@ -168,6 +171,7 @@ class CollectLinks:
 
         links = []
 
+        scraped = 0
         for box in photo_grid_boxes:
             try:
                 imgs = box.find_elements(By.CLASS_NAME, '_img')
@@ -175,7 +179,9 @@ class CollectLinks:
                 for img in imgs:
                     src = img.get_attribute("src")
                     if src[0] != 'd':
-                        links.append(src)
+                        if scraped< self.maxNum:
+                            links.append(src)
+                            scraped +=1
             except Exception as e:
                 print('[Exception occurred while collecting links from naver] {}'.format(e))
 
@@ -217,12 +223,16 @@ class CollectLinks:
         print('Scraping links')
 
         links = []
-
+        scraped = 0
         for box in photo_grid_boxes:
             try:
                 img = box.find_elements(By.TAG_NAME, 'img')
                 src = img[0].get_attribute("src")
-                links.append(src)
+                if scraped <self.maxNum:
+                    links.append(src)
+                    scraped+=1
+                else:
+                    break
             except Exception as e:
                 print('[Exception occurred while collecting links from daum] {}'.format(e))
 
@@ -258,7 +268,7 @@ class CollectLinks:
 
         last_scroll = 0
         scroll_patience = 0
-
+        scraped = 0
         while True:
             try:
                 xpath = '//div[@class="irc_c i8187 immersive-container"]//img[@class="irc_mi"]'
@@ -268,9 +278,13 @@ class CollectLinks:
                     src = img.get_attribute('src')
 
                     if src not in links and src is not None:
-                        links.append(src)
-                        print('%d: %s' % (count, src))
-                        count += 1
+                        if scraped <self.maxNum:
+                            links.append(src)
+                            print('%d: %s' % (count, src))
+                            count += 1
+                        else:
+                            break
+                        
 
             except StaleElementReferenceException:
                 # print('[Expected Exception - StaleElementReferenceException]')
@@ -315,7 +329,7 @@ class CollectLinks:
 
         last_scroll = 0
         scroll_patience = 0
-
+        scraped = 0
         while True:
             try:
                 xpath = '//div[@class="image_viewer_wrap _sauImageViewer"]//img[@class="_image_source"]'
@@ -325,9 +339,12 @@ class CollectLinks:
                     src = img.get_attribute('src')
 
                     if src not in links and src is not None:
-                        links.append(src)
-                        print('%d: %s' % (count, src))
-                        count += 1
+                        if scraped <self.maxNum:
+                            links.append(src)
+                            print('%d: %s' % (count, src))
+                            count += 1
+                        else:
+                            break
 
             except StaleElementReferenceException:
                 # print('[Expected Exception - StaleElementReferenceException]')
@@ -356,6 +373,6 @@ class CollectLinks:
 
 
 if __name__ == '__main__':
-    collect = CollectLinks()
+    collect = CollectLinks(collect.maxNum)
     links = collect.naver_full('박보영')
     print(len(links), links)

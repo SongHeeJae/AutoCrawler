@@ -60,7 +60,7 @@ class Sites:
 
 class AutoCrawler:
     def __init__(self, skip_already_exist=True, n_threads=4, do_google=True, do_naver=True, do_daum=True, download_path='download',
-                 full_resolution=False, face=False):
+                 full_resolution=False, face=False, maxNum= 100):
         """
         :param skip_already_exist: Skips keyword already downloaded before. This is needed when re-downloading.
         :param n_threads: Number of threads to download.
@@ -80,6 +80,7 @@ class AutoCrawler:
         self.download_path = download_path
         self.full_resolution = full_resolution
         self.face = face
+        self.maxNum = maxNum
 
         #download_path에 입력된 경로로 디렉토리 생성
         os.makedirs('./{}'.format(self.download_path), exist_ok=True)
@@ -217,7 +218,7 @@ class AutoCrawler:
         add_url = Sites.get_face_url(site_code) if self.face else "" 
 
         try:
-            collect = CollectLinks()  # CollectLinks 객체를 생성한다.
+            collect = CollectLinks(self.maxNum)  # CollectLinks 객체를 생성한다.
         except Exception as e:
             print('Error occurred while initializing chromedriver - {}'.format(e)) # 예외 발생시 종료
             return
@@ -368,6 +369,7 @@ if __name__ == '__main__':
     parser.add_argument('--daum', type=str, default='true', help='Download from daum.net (boolean)') # 추가코드
     parser.add_argument('--full', type=str, default='false', help='Download full resolution image instead of thumbnails (slow)')
     parser.add_argument('--face', type=str, default='false', help='Face search mode')
+    parser.add_argument('--downNum', type = int, required=True , help = 'Max Number of images to downlad')
     # 명령행을 검사하여 인자 파싱
     args = parser.parse_args()
 
@@ -379,10 +381,10 @@ if __name__ == '__main__':
     _daum = False if str(args.daum).lower() == 'false' else True # 추가코드
     _full = False if str(args.full).lower() == 'false' else True
     _face = False if str(args.face).lower() == 'false' else True
-
+    _maxNum = args.downNum
     # 선택된 옵션 출력
-    print('Options - skip:{}, threads:{}, google:{}, naver:{}, daum:{}, full_resolution:{}, face:{}'.format(_skip, _threads, _google, _naver, _daum, _full, _face))
+    print('Options - skip:{}, threads:{}, google:{}, naver:{}, daum:{}, full_resolution:{}, face:{}, downNum:{}'.format(_skip, _threads, _google, _naver, _daum, _full, _face, _maxNum))
 
     # 옵션에 관한 각 변수로 AutoCrawler 객체 생성
-    crawler = AutoCrawler(skip_already_exist=_skip, n_threads=_threads, do_google=_google, do_naver=_naver, do_daum=_daum, full_resolution=_full, face=_face)
+    crawler = AutoCrawler(skip_already_exist=_skip, n_threads=_threads, do_google=_google, do_naver=_naver, do_daum=_daum, full_resolution=_full, face=_face, maxNum=_maxNum)
     crawler.do_crawling() # do_crawling() 수행
