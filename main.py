@@ -15,7 +15,7 @@ Copyright 2018 YoongiKim
 """
 
 import sys
-sys.path.append('C:\\Users\\jihun\\AppData\\Local\\Programs\\Python\\Python37-32\\Lib\\site-packages')
+
 
 from tkinter import filedialog
 from tkinter import *
