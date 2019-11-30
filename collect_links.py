@@ -281,6 +281,7 @@ class CollectLinks:
                         if scraped <self.maxNum:
                             links.append(src)
                             print('%d: %s' % (count, src))
+                            scraped+=1
                             count += 1
                         else:
                             break
@@ -342,6 +343,7 @@ class CollectLinks:
                         if scraped <self.maxNum:
                             links.append(src)
                             print('%d: %s' % (count, src))
+                            scraped +=1
                             count += 1
                         else:
                             break

@@ -13,7 +13,8 @@ Copyright 2018 YoongiKim
    See the License for the specific language governing permissions and
    limitations under the License.
 """
-
+import sys
+sys.path.append('C:\\Users\\jihun\\AppData\\Local\\Programs\\Python\\Python37-32\\Lib\\site-packages')
 
 import os
 import requests
