@@ -13,9 +13,12 @@ Copyright 2018 YoongiKim
    See the License for the specific language governing permissions and
    limitations under the License.
 """
+
 import sys
 sys.path.append('C:\\Users\\jihun\\AppData\\Local\\Programs\\Python\\Python37-32\\Lib\\site-packages')
 
+from tkinter import filedialog
+from tkinter import *
 import os
 import requests
 import shutil
@@ -84,8 +87,11 @@ class AutoCrawler:
         self.maxNum = maxNum
 
         #download_path에 입력된 경로로 디렉토리 생성
-        os.makedirs('./{}'.format(self.download_path), exist_ok=True)
-
+        if self.download_path =='download':
+            os.makedirs('./{}'.format(self.download_path), exist_ok=True)
+            print(self.download_path)
+        else:
+            print(self.download_path)
     @staticmethod
     def all_dirs(path):
         paths = [] # 리스트를 생성한다.
@@ -383,9 +389,17 @@ if __name__ == '__main__':
     _full = False if str(args.full).lower() == 'false' else True
     _face = False if str(args.face).lower() == 'false' else True
     _maxNum = args.downNum
+
+    root = Tk()
+    dirname = filedialog.askdirectory()
+    re_dirname = dirname.replace("/", "\\")
+
+    
+    #download_path= root.dirname, 
+
     # 선택된 옵션 출력
     print('Options - skip:{}, threads:{}, google:{}, naver:{}, daum:{}, full_resolution:{}, face:{}, downNum:{}'.format(_skip, _threads, _google, _naver, _daum, _full, _face, _maxNum))
 
     # 옵션에 관한 각 변수로 AutoCrawler 객체 생성
-    crawler = AutoCrawler(skip_already_exist=_skip, n_threads=_threads, do_google=_google, do_naver=_naver, do_daum=_daum, full_resolution=_full, face=_face, maxNum=_maxNum)
+    crawler = AutoCrawler(skip_already_exist=_skip, n_threads=_threads, do_google=_google, do_naver=_naver, do_daum=_daum, download_path= re_dirname, full_resolution=_full, face=_face, maxNum=_maxNum)
     crawler.do_crawling() # do_crawling() 수행
