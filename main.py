@@ -14,8 +14,6 @@ Copyright 2018 YoongiKim
    limitations under the License.
 """
 
-import sys
-
 
 from tkinter import filedialog
 from tkinter import *
@@ -64,7 +62,7 @@ class Sites:
 
 class AutoCrawler:
     def __init__(self, skip_already_exist=True, n_threads=4, do_google=True, do_naver=True, do_daum=True, download_path='download',
-                 full_resolution=False, face=False, maxNum= 100):
+                 full_resolution=False, face=False, maxNum=100):
         """
         :param skip_already_exist: Skips keyword already downloaded before. This is needed when re-downloading.
         :param n_threads: Number of threads to download.
@@ -376,7 +374,7 @@ if __name__ == '__main__':
     parser.add_argument('--daum', type=str, default='true', help='Download from daum.net (boolean)') # 추가코드
     parser.add_argument('--full', type=str, default='false', help='Download full resolution image instead of thumbnails (slow)')
     parser.add_argument('--face', type=str, default='false', help='Face search mode')
-    parser.add_argument('--downNum', type = int, required=True , help = 'Max Number of images to downlad')
+    parser.add_argument('--downNum', type = int, required=True , default = 10000, help = 'Max Number of images to downlad')
     # 명령행을 검사하여 인자 파싱
     args = parser.parse_args()
 
