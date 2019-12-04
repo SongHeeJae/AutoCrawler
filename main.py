@@ -62,7 +62,8 @@ class Sites:
 
 class AutoCrawler:
     def __init__(self, skip_already_exist=True, n_threads=4, do_google=True, do_naver=True, do_daum=True, download_path='download',
-                 full_resolution=False, face=False, maxNum=100, , googlecolor = 'red', googledate = 'd', navercolor = 'red', naverdate = 'd', daumcolor = 'red'):
+                 full_resolution=False, face=False, maxNum=100, , googlecolor = 'red', googledate = 'd', navercolor = 'red', 
+                 naverdate = 'd', daumcolor = 'red', daumdate = 'd'):
         """
         :param skip_already_exist: Skips keyword already downloaded before. This is needed when re-downloading.
         :param n_threads: Number of threads to download.
@@ -94,12 +95,15 @@ class AutoCrawler:
             self.naverdate = naverda
             daumcol = input("다음색깔지정: ")
             self.daumcolor = daumcol
+            daumda = input("다음기간지정 ex) 1일-d 1주-w 1개월-m 6개월-6m 1년-y : ")
+            self.daumdate = daumda
         else:
             self.googlecolor = googlecolor
             self.googledate = googledate
             self.navercolor = navercolor
             self.naverdate = naverdate
             self.daumcolor = daumcolor
+            self.daumdate = daumdate
             
         #download_path에 입력된 경로로 디렉토리 생성
         if self.download_path =='download':
@@ -282,11 +286,11 @@ class AutoCrawler:
                 elif site_code == Sites.NAVER_FULL:
                     links = collect.naver_full(keyword, "&res_fr=0&res_to=0&sm=tab_opt&face=0&color="+self.navercolor+"&ccl=0&nso=so%3Ar%2Ca%3Aall%2Cp%3A1d&datetype="+self.naverdate+"&startdate=0&enddate=0&start=1")
 
-                elif site_code == Sites.DAUM:
-                    links = collect.daum(keyword, "&ColorByName="+self.daumcolor)
+                  elif site_code == Sites.DAUM:
+                    links = collect.daum(keyword, "&ColorByName="+self.daumcolor+"&period="+self.daumdate)
 
                 elif site_code == Sites.DAUM_FULL:
-                    links = collect.daum_full(keyword, "&ColorByName="+self.daumcolor)
+                    links = collect.daum(keyword, "&ColorByName="+self.daumcolor+"&period="+self.daumdate)
 
                 else:
                     print('Invalid Site Code')
@@ -418,6 +422,7 @@ if __name__ == '__main__':
     parser.add_argument('--navercolor', type = str,  default = '0', help = 'Search color')
     parser.add_argument('--naverdate', type = str,  default = '0', help = 'Search date')
     parser.add_argument('--daumcolor', type = str,  default = 'red', help = 'Search color')
+    parser.add_argument('--daumdate', type = str,  default = 'd', help = 'Search date')
     # 명령행을 검사하여 인자 파싱
     args = parser.parse_args()
 
@@ -435,6 +440,7 @@ if __name__ == '__main__':
     _navercolor = args.navercolor
     _naverdate = args.naverdate
     _daumcolor = args.daumcolor
+    _daumdate = args.daumdate
 
     root = Tk()
     dirname = filedialog.askdirectory()
@@ -444,8 +450,8 @@ if __name__ == '__main__':
     #download_path= root.dirname, 
 
     # 선택된 옵션 출력
-    print('Options - skip:{}, threads:{}, google:{}, naver:{}, daum:{}, full_resolution:{}, face:{}, downNum:{}, googlecolor:{}, googledate: {}, navercolor:{}, naverdate: {}, daumcolor:{}'.format(_skip, _threads, _google, _naver, _daum, _full, _face, _maxNum, _googlecolor, _googledate, _navercolor, _naverdate, _daumcolor))
+    print('Options - skip:{}, threads:{}, google:{}, naver:{}, daum:{}, full_resolution:{}, face:{}, downNum:{}, googlecolor:{}, googledate: {}, navercolor:{}, naverdate: {}, daumcolor: {}'.format(_skip, _threads, _google, _naver, _daum, _full, _face, _maxNum, _googlecolor, _googledate, _navercolor, _naverdate, _daumcolor, _daumdate))
 
     # 옵션에 관한 각 변수로 AutoCrawler 객체 생성
     crawler = AutoCrawler(skip_already_exist=_skip, n_threads=_threads, do_google=_google, do_naver=_naver, do_daum=_daum, download_path= re_dirname, full_resolution=_full, face=_face, maxNum=_maxNum,
-                          googlecolor = _googlecolor, googledate = _googledate, navercolor = _navercolor, naverdate = _naverdate, daumcolor = _daumcolor)
+                          googlecolor = _googlecolor, googledate = _googledate, navercolor = _navercolor, naverdate = _naverdate, daumcolor = _daumcolor, daumdate = _daumdate)
