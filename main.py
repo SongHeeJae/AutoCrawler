@@ -85,17 +85,18 @@ class AutoCrawler:
         self.face = face
         self.maxNum = maxNum
         if face==False:
-            googlecol = input("구글색깔지정: ")
+           googlecol = input("구글 색깔 : ")
             self.googlecolor = googlecol
-            googleda = input("구글기간지정 ex) 1일:d 1주일:w 1달:m 1년:y : ")
+            googleda = input("구글 기간 ex) 1일-d 1주일-w 1달-m 1년-y : ")
             self.googledate = googleda
-            navercol = input("네이버색깔지정 ex) 빨강:1 주황:2 노랑:3 연두:4 초록:5 하늘:6 파랑:7 보라:8 핑크:9 살색:10 갈색:11 고동:12 흰색:13 회색:14 검정:15 : ")
+            navercol = input("네이버 색깔 ex) 빨강-1 주황-2 노랑-3 연두-4 초록-5 하늘-6 파랑-7 보라-8 핑크-9 살색-10 갈색-11 고동-12 흰색-13 회색-14 검정-15 : ")
             self.navercolor = navercol
-            naverda = input("네이버기간지정 ex) 1일:1 1주:2 1개월:3 6개월:4 1년:5 : ")
+            naverda = input("네이버 기간 ex) 1일-1 1주-2 1개월-3 6개월-4 1년-5 : ")
             self.naverdate = naverda
-            daumcol = input("다음색깔지정: ")
+            daumcol = input("다음 색깔 : ")
             self.daumcolor = daumcol
-            daumda = input("다음기간지정 ex) 1일-d 1주-w 1개월-m 6개월-6m 1년-y : ")
+            daumda = input("다음 기간 ex) 1일-d 1주-w 1개월-m 6개월-6m 1년-y : ")
+            self.daumdate = daumda
             self.daumdate = daumda
         else:
             self.googlecolor = googlecolor
