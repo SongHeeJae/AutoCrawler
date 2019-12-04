@@ -85,7 +85,7 @@ class AutoCrawler:
         self.face = face
         self.maxNum = maxNum
         if face==False:
-           googlecol = input("구글 색깔 : ")
+            googlecol = input("구글 색깔 : ")
             self.googlecolor = googlecol
             googleda = input("구글 기간 ex) 1일-d 1주일-w 1달-m 1년-y : ")
             self.googledate = googleda
