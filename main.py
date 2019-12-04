@@ -97,7 +97,6 @@ class AutoCrawler:
             self.daumcolor = daumcol
             daumda = input("다음 기간 ex) 1일-d 1주-w 1개월-m 6개월-6m 1년-y : ")
             self.daumdate = daumda
-            self.daumdate = daumda
         else:
             self.googlecolor = googlecolor
             self.googledate = googledate
