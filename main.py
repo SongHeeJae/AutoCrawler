@@ -24,6 +24,7 @@ from multiprocessing import Pool
 import argparse
 from collect_links import CollectLinks
 import imghdr
+from datetime import datetime
 
 
 class Sites:
@@ -62,8 +63,8 @@ class Sites:
 
 class AutoCrawler:
     def __init__(self, skip_already_exist=True, n_threads=4, do_google=True, do_naver=True, do_daum=True, download_path='download',
-                 full_resolution=False, face=False, maxNum=100, , googlecolor = 'red', googledate = 'd', navercolor = 'red', 
-                 naverdate = 'd', daumcolor = 'red', daumdate = 'd'):
+                 full_resolution=False, face=False, maxNum=100, googlecolor = 'red', googledate = 'd',
+                 navercolor = 'red', naverdate = 'd', daumcolor = 'red',daumdate = 'd'):
         """
         :param skip_already_exist: Skips keyword already downloaded before. This is needed when re-downloading.
         :param n_threads: Number of threads to download.
@@ -97,6 +98,7 @@ class AutoCrawler:
             self.daumcolor = daumcol
             daumda = input("다음 기간 ex) 1일-d 1주-w 1개월-m 6개월-6m 1년-y : ")
             self.daumdate = daumda
+            
         else:
             self.googlecolor = googlecolor
             self.googledate = googledate
@@ -104,7 +106,10 @@ class AutoCrawler:
             self.naverdate = naverdate
             self.daumcolor = daumcolor
             self.daumdate = daumdate
-            
+        #googleda = input("다음기간지정 ex) 1일 d 1주일 w 1달 m 1년 y : ")
+        #self.daumdate = daumdate
+        
+
         #download_path에 입력된 경로로 디렉토리 생성
         if self.download_path =='download':
             os.makedirs('./{}'.format(self.download_path), exist_ok=True)
@@ -148,6 +153,7 @@ class AutoCrawler:
             return 'png'
         else:
             return default # 해당하는 확장자명 없다면 default로 반환
+    
 
     @staticmethod
     def validate_image(path):
@@ -159,6 +165,7 @@ class AutoCrawler:
             ext = 'jpg'
         return ext # 이미지 유형 반환
 
+    
     @staticmethod
     def make_dir(dirname):
         # dirname은 인스턴스 변수 download_path에 저장된 경로 내에
@@ -242,6 +249,8 @@ class AutoCrawler:
                 continue # 예외가 발생하였다면, 내용을 출력해주고 continue(계속 진행)한다.
 
     def download_from_site(self, keyword, site_code):
+        #c = self.color()
+        #d = self.date()
         site_name = Sites.get_text(site_code) # site_code를 이용하여 사이트이름을 반환한다.
         # face 모드가 True였다면 얼굴 검색이 가능한 url을 반환하고, False였다면 공백을 저장한다.
         add_url = Sites.get_face_url(site_code) if self.face else "" 
@@ -254,9 +263,6 @@ class AutoCrawler:
 
         try:
             print('Collecting links... {} from {}'.format(keyword, site_name))
-
-            # site_code에 해당하는 collect 객체의 메소드를 수행하여 link 데이터를 수집하여 links에 반환한다.
-            print('시작')
             if add_url != "":
                 if site_code == Sites.GOOGLE:
                     links = collect.google(keyword, add_url)
@@ -270,10 +276,10 @@ class AutoCrawler:
                     links = collect.google(keyword, add_url)
                 elif site_code == Sites.DAUM_FULL:
                     links = collect.google(keyword, add_url)
-                else:
-                    print('Invalid Site Code')
-                    links = [] # site_code가 유효하지않다면 links는 비어있다.
-                elif add_url == "":
+
+            # site_code에 해당하는 collect 객체의 메소드를 수행하여 link 데이터를 수집하여 links에 반환한다.
+            #print('시작')
+            elif add_url == "":
                 if site_code == Sites.GOOGLE:
                     links = collect.google(keyword, "&hl=ko&hl=ko&tbs=ic%3Aspecific%2Cisc%3A"+self.googlecolor+"%2Cqdr%3A"+self.googledate+"&ved=0CAEQpwVqFwoTCPCmvM6jm-YCFQAAAAAdAAAAABAC&biw=1903&bih=969")
 
@@ -286,7 +292,7 @@ class AutoCrawler:
                 elif site_code == Sites.NAVER_FULL:
                     links = collect.naver_full(keyword, "&res_fr=0&res_to=0&sm=tab_opt&face=0&color="+self.navercolor+"&ccl=0&nso=so%3Ar%2Ca%3Aall%2Cp%3A1d&datetype="+self.naverdate+"&startdate=0&enddate=0&start=1")
 
-                  elif site_code == Sites.DAUM:
+                elif site_code == Sites.DAUM:
                     links = collect.daum(keyword, "&ColorByName="+self.daumcolor+"&period="+self.daumdate)
 
                 elif site_code == Sites.DAUM_FULL:
@@ -295,7 +301,6 @@ class AutoCrawler:
                 else:
                     print('Invalid Site Code')
                     links = [] # site_code가 유효하지않다면 links는 비어있다.
-              
 
             print('종료')
             print('Downloading images from collected links... {} from {}'.format(keyword, site_name))
@@ -416,13 +421,15 @@ if __name__ == '__main__':
     parser.add_argument('--daum', type=str, default='true', help='Download from daum.net (boolean)') # 추가코드
     parser.add_argument('--full', type=str, default='false', help='Download full resolution image instead of thumbnails (slow)')
     parser.add_argument('--face', type=str, default='false', help='Face search mode')
-    parser.add_argument('--downNum', type = int, required=True , default = 10000, help = 'Max Number of images to downlad')
+    parser.add_argument('--downNum', type = int,  default = 10000, help = 'Max Number of images to downlad')
     parser.add_argument('--googlecolor', type = str,  default = 'red', help = 'Search color')
     parser.add_argument('--googledate', type = str,  default = 'd', help = 'Search date')
     parser.add_argument('--navercolor', type = str,  default = '0', help = 'Search color')
     parser.add_argument('--naverdate', type = str,  default = '0', help = 'Search date')
     parser.add_argument('--daumcolor', type = str,  default = 'red', help = 'Search color')
+   # parser.add_argument('--url', type = str,  default = '', help = 'Link URL')
     parser.add_argument('--daumdate', type = str,  default = 'd', help = 'Search date')
+    
     # 명령행을 검사하여 인자 파싱
     args = parser.parse_args()
 
@@ -441,6 +448,7 @@ if __name__ == '__main__':
     _naverdate = args.naverdate
     _daumcolor = args.daumcolor
     _daumdate = args.daumdate
+    #_url = args.url
 
     root = Tk()
     dirname = filedialog.askdirectory()
@@ -450,8 +458,11 @@ if __name__ == '__main__':
     #download_path= root.dirname, 
 
     # 선택된 옵션 출력
-    print('Options - skip:{}, threads:{}, google:{}, naver:{}, daum:{}, full_resolution:{}, face:{}, downNum:{}, googlecolor:{}, googledate: {}, navercolor:{}, naverdate: {}, daumcolor: {}'.format(_skip, _threads, _google, _naver, _daum, _full, _face, _maxNum, _googlecolor, _googledate, _navercolor, _naverdate, _daumcolor, _daumdate))
+    print('Options - skip:{}, threads:{}, google:{}, naver:{}, daum:{}, full_resolution:{}, face:{}, downNum:{} , googlecolor:{}, googledate: {}, navercolor:{}, naverdate: {}, daumcolor:{}'.format(_skip, _threads, _google, _naver, _daum, _full,
+                                                                                                                                                                                                     _face, _maxNum, _googlecolor, _googledate, _navercolor,
+                                                                                                                                                                                                     _naverdate, _daumcolor, _daumdate))
 
     # 옵션에 관한 각 변수로 AutoCrawler 객체 생성
     crawler = AutoCrawler(skip_already_exist=_skip, n_threads=_threads, do_google=_google, do_naver=_naver, do_daum=_daum, download_path= re_dirname, full_resolution=_full, face=_face, maxNum=_maxNum,
                           googlecolor = _googlecolor, googledate = _googledate, navercolor = _navercolor, naverdate = _naverdate, daumcolor = _daumcolor, daumdate = _daumdate)
+    crawler.do_crawling() # do_crawling() 수행
