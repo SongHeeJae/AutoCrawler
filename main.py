@@ -416,12 +416,12 @@ if __name__ == '__main__':
     # 인자에 대한 정보 추가
     parser.add_argument('--skip', type=str, default='true', help='Skips keyword already downloaded before. This is needed when re-downloading.')
     parser.add_argument('--threads', type=int, default=4, help='Number of threads to download.')
-    parser.add_argument('--google', type=str, default='true', help='Download from google.com (boolean)')
-    parser.add_argument('--naver', type=str, default='true', help='Download from naver.com (boolean)')
+    parser.add_argument('--google', type=str, default='false', help='Download from google.com (boolean)')
+    parser.add_argument('--naver', type=str, default='false', help='Download from naver.com (boolean)')
     parser.add_argument('--daum', type=str, default='true', help='Download from daum.net (boolean)') # 추가코드
-    parser.add_argument('--full', type=str, default='false', help='Download full resolution image instead of thumbnails (slow)')
+    parser.add_argument('--full', type=str, default='true', help='Download full resolution image instead of thumbnails (slow)')
     parser.add_argument('--face', type=str, default='false', help='Face search mode')
-    parser.add_argument('--downNum', type = int,  default = 10000, help = 'Max Number of images to downlad')
+    parser.add_argument('--downNum', type = int,  default = 100, help = 'Max Number of images to downlad')
     parser.add_argument('--googlecolor', type = str,  default = 'red', help = 'Search color')
     parser.add_argument('--googledate', type = str,  default = 'd', help = 'Search date')
     parser.add_argument('--navercolor', type = str,  default = '0', help = 'Search color')
