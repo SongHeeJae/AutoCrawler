@@ -296,7 +296,7 @@ class AutoCrawler:
                     links = collect.daum(keyword, "&ColorByName="+self.daumcolor+"&period="+self.daumdate)
 
                 elif site_code == Sites.DAUM_FULL:
-                    links = collect.daum(keyword, "&ColorByName="+self.daumcolor+"&period="+self.daumdate)
+                    links = collect.daum_full(keyword, "&ColorByName="+self.daumcolor+"&period="+self.daumdate)
 
                 else:
                     print('Invalid Site Code')
