@@ -461,7 +461,7 @@ if __name__ == '__main__':
     #download_path= root.dirname, 
 
     # 선택된 옵션 출력
-    print('Options - skip:{}, threads:{}, google:{}, naver:{}, daum:{}, full_resolution:{}, face:{}, downNum:{} , googlecolor:{}, googledate: {}, navercolor:{}, naverdate: {}, daumcolor:{}'.format(_skip, _threads, _google, _naver, _daum, _full,
+    print('Options - skip:{}, threads:{}, google:{}, naver:{}, daum:{}, full_resolution:{}, face:{}, downNum:{} , googlecolor:{}, googledate: {}, navercolor:{}, naverdate: {}, daumcolor:{}, daumcdate:{}'.format(_skip, _threads, _google, _naver, _daum, _full,
                                                                                                                                                                                                      _face, _maxNum, _googlecolor, _googledate, _navercolor,
                                                                                                                                                                                                      _naverdate, _daumcolor, _daumdate))
 
